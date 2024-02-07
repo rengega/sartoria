@@ -3,10 +3,15 @@ package dao;
 import model_domain.Costumer;
 import model_domain.Job;
 import model_domain.Order;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+// TODO: implement DAO as singleton
+
+@Service
 public class DAO {
     // refs to all repos
     private JobRepository jobRepository;
@@ -48,6 +53,11 @@ public class DAO {
         this.orderRepository = orderRepository;
     }
 
+
+    // Methods
+
+    // JOBS
+
     public void addJob(Job job) {
         jobRepository.save(job);
     }
@@ -65,13 +75,20 @@ public class DAO {
         return jobRepository.findById(id).get();
     }
 
+    public List<Job> getJobByName(String name) {
+        Long id =  jobRepository.findJobByName(name).get(0);
+        List<Job> jobs = new ArrayList<>();
+        for (Long i : jobRepository.findJobByName(name)) {
+            jobs.add(jobRepository.findById(i).get());
+        }
+        return jobs;
+    }
+
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
 
-    public List<Long> findJobByName(String name) {
-        return jobRepository.findJobByName(name);
-    }
+    //  COSTUMERS
 
     public void addCostumer(Costumer costumer) {
         costumerRepository.save(costumer);
@@ -120,6 +137,8 @@ public class DAO {
         orderRepository.deleteById(id);
     }
 
+
+    // ORDERS
     public void updateOrder(Order order) {
         orderRepository.save(order);
     }
@@ -148,7 +167,5 @@ public class DAO {
         }
         return orders;
     }
-
-
 
 }
