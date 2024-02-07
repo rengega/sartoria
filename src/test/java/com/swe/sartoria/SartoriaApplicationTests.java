@@ -34,7 +34,7 @@ class SartoriaApplicationTests {
         jobController.addJob(job1);
         jobController.addJob(job2);
 
-        Costumer costumer1 = new Costumer("costumer1", "address1", "email1", 3280119673L);
+        Costumer costumer1 = new Costumer("costumer1", "address1", "renigega@outlook.it", 3280119673L);
         costumerConstroller.addCostumer(costumer1);
 
 
@@ -43,6 +43,11 @@ class SartoriaApplicationTests {
         od1.addJob(job2);
 
         orderController.SaveOrder(od1);
+
+        Order retrieved = orderController.GetOrder(1);
+
+        retrieved.setStatus("completed");
+        orderController.UpdateOrder(retrieved);
 
 
     }

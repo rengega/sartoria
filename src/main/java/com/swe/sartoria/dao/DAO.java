@@ -1,5 +1,6 @@
 package com.swe.sartoria.dao;
 
+import com.swe.sartoria.mail_service.MailService;
 import com.swe.sartoria.model_domain.Costumer;
 import com.swe.sartoria.model_domain.Job;
 import com.swe.sartoria.model_domain.Order;
@@ -18,12 +19,14 @@ public class DAO {
     private JobRepository jobRepository;
     private CostumerRepository costumerRepository;
     private OrderRepository  orderRepository;
+    private MailService mailService;
 
     @Autowired
-    public DAO (JobRepository jobRepository, CostumerRepository costumerRepository, OrderRepository orderRepository) {
+    public DAO (JobRepository jobRepository, CostumerRepository costumerRepository, OrderRepository orderRepository, MailService mailService) {
         this.jobRepository = jobRepository;
         this.costumerRepository = costumerRepository;
         this.orderRepository = orderRepository;
+        this.mailService = mailService;
     }
 
 
@@ -115,6 +118,10 @@ public class DAO {
     // ORDERS
     public void updateOrder(Order order) {
         orderRepository.save(order);
+        if (order.getStatus().equals("completed")) {
+            String email = order.getCostumer().getEmail();
+            mailService.sendMail(email, "Order Completed", "Your order has been completed");
+        }
     }
 
     public Order getOrder(long id) {

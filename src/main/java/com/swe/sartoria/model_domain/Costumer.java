@@ -24,5 +24,15 @@ public class Costumer {
     public Costumer(){
     }
 
+    public long getId() {
+        return id;
+    }
+
+
+    // defensive copy
+    public String getEmail(){
+        return String.valueOf(email);
+    }
+
 
 }
