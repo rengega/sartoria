@@ -4,6 +4,7 @@ import com.swe.sartoria.buisiness_logic.CostumerConstroller;
 import com.swe.sartoria.buisiness_logic.JobController;
 import com.swe.sartoria.buisiness_logic.OrderController;
 import com.swe.sartoria.dao.DAO;
+import com.swe.sartoria.mail_service.MailService;
 import com.swe.sartoria.model_domain.Costumer;
 import com.swe.sartoria.model_domain.Job;
 import com.swe.sartoria.model_domain.Order;
@@ -19,6 +20,9 @@ class SartoriaApplicationTests {
 
     @Autowired
     private DAO dao;
+
+    @Autowired
+    private MailService mailService;
     @Test
     void contextLoads() {
         CostumerConstroller costumerConstroller = new CostumerConstroller(dao);
@@ -42,5 +46,10 @@ class SartoriaApplicationTests {
 
 
     }
+
+    @Test
+    void testMailService() {
+        mailService.sendMail("renigega@outlook.it", "test", "test");
+      }
 
 }
