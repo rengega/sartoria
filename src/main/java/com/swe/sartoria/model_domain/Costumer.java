@@ -1,4 +1,4 @@
-package model_domain;
+package com.swe.sartoria.model_domain;
 
 import jakarta.persistence.*;
 

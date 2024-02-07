@@ -1,8 +1,9 @@
-package dao;
+package com.swe.sartoria.dao;
 
-import model_domain.Costumer;
-import model_domain.Job;
-import model_domain.Order;
+import com.swe.sartoria.model_domain.Costumer;
+import com.swe.sartoria.model_domain.Job;
+import com.swe.sartoria.model_domain.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,40 +19,13 @@ public class DAO {
     private CostumerRepository costumerRepository;
     private OrderRepository  orderRepository;
 
+    @Autowired
     public DAO (JobRepository jobRepository, CostumerRepository costumerRepository, OrderRepository orderRepository) {
         this.jobRepository = jobRepository;
         this.costumerRepository = costumerRepository;
         this.orderRepository = orderRepository;
     }
 
-    // Getters
-
-    public JobRepository getJobRepository() {
-        return jobRepository;
-    }
-
-    public CostumerRepository getCostumerRepository() {
-        return costumerRepository;
-    }
-
-    public OrderRepository getOrderRepository() {
-        return orderRepository;
-    }
-
-
-    // Setters
-
-    public void setJobRepository(JobRepository jobRepository) {
-        this.jobRepository = jobRepository;
-    }
-
-    public void setCostumerRepository(CostumerRepository costumerRepository) {
-        this.costumerRepository = costumerRepository;
-    }
-
-    public void setOrderRepository(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
 
 
     // Methods

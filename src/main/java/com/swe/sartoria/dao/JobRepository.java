@@ -1,6 +1,6 @@
-package dao;
+package com.swe.sartoria.dao;
 
-import model_domain.Job;
+import com.swe.sartoria.model_domain.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

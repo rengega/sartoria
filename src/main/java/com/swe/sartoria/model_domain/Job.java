@@ -1,4 +1,4 @@
-package model_domain;
+package com.swe.sartoria.model_domain;
 
 
 import jakarta.persistence.Entity;
@@ -16,4 +16,13 @@ public class Job {
     private String name;
     private String description;
     private float price;
+
+    public Job(String name, String description, float price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+
+    public Job(){
+    }
 }
