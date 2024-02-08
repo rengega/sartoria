@@ -9,15 +9,9 @@ import java.util.List;
 
 @Repository
 public interface CostumerRepository extends JpaRepository<Costumer, Long> {
-    // write queries for methods as needed in here
-
-    @Query("SELECT c.id FROM Costumer c WHERE c.name = ?1")
-    List<Long> findIdsByName(String name);
-    @Query("SELECT c.id FROM Costumer c WHERE c.surname = ?1")
-    List<Long> findIdsBySurname(String surname);
 
 
-    // get id if name or surname contains string
+    // the following is a helper method for the search of orders in DAO
     @Query("SELECT c.id FROM Costumer c WHERE c.name LIKE %?1%" +
             " OR c.surname LIKE %?1%")
     List<Long> findIdsByString(String searchString);

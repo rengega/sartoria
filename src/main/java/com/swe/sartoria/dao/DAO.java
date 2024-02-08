@@ -122,29 +122,6 @@ public class DAO {
         return orderRepository.findAll();
     }
 
-    // write method to retrieve orders by costumer names
-
-
-    public List<Order> getOrdersByCostumerName(String name) {
-        List<Long> clientsForName = costumerRepository.findIdsByName(name);
-        List<Order> orders = new ArrayList<>();
-
-        for (Long id : clientsForName) {
-            orders.addAll(orderRepository.findOrderByCostumer(id));
-        }
-        return orders;
-    }
-
-    public List<Order> getOrdersByCostumerSurname(String surname) {
-        List<Long> clientsForSurname = costumerRepository.findIdsBySurname(surname);
-        List<Order> orders = new ArrayList<>();
-
-        for (Long id : clientsForSurname) {
-            orders.addAll(orderRepository.findOrderByCostumer(id));
-        }
-        return orders;
-    }
-
     public List<Order> getOrdersByCostumerString(String searchString) {
         List<Long> clientsForString = costumerRepository.findIdsByString(searchString);
         List<Order> orders = new ArrayList<>();
