@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 @SpringBootTest
-
 class SartoriaApplicationTests {
 
     @Autowired
@@ -48,16 +47,15 @@ class SartoriaApplicationTests {
         for (Order o : orders) {
             orderController.DeleteOrder(o);
         }
-
-
     }
-
 
     @Test
     void testMailService() {
         mailService.sendMail("renigega@outlook.it", "test", "test");
     }
 
+
+    // TODO: comment and document to explain everything
 
     @Nested
     class JobControllerTests {
@@ -499,6 +497,8 @@ class SartoriaApplicationTests {
                 System.out.println("Selected: ");
                 System.out.println(selected.toString());
                 selected.setDescription("NewDescription");
+                // will send email to orders costumer if status is changed to "completed"
+                selected.setStatus("completed");
                 List<Job> jobs = selected.getJobs();
                 System.out.println("Jobs before update: ");
                 for (Job j : jobs) {

@@ -7,7 +7,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 
-// TODO: Exepction handling
+// TODO: Exception handling
 public class OrderController {
     private DAO myDao;
 
@@ -34,6 +34,10 @@ public class OrderController {
         return myDao.getOrdersByCostumerString(search);
     }
 
+
+    // TODO: get orders by status
+    // TODO: get orders by due date
+    // TODO: REMEMBER TO TEST ALL METHODS
 
     public List<Order> getAllOrders(){
         return myDao.getAllOrders();

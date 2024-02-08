@@ -90,24 +90,10 @@ public class DAO {
         return costumerRepository.findAll();
     }
 
-    public List<Costumer> findCostumerByName(String name) {
-        // add exception handling
-        return costumerRepository.findCostumerByName(name);
-    }
-
-    public List<Costumer> findCostumerBySurname(String surname) {
-        // add exception handling
-        return costumerRepository.findCostumerBySurname(surname);
-    }
 
     public List<Costumer> findCostumerBySearch(String search) {
         return costumerRepository.findCostumerByString(search);
     }
-    public List<Costumer> findCostumerByEmail(String email) {
-        // add exception handling
-        return costumerRepository.findCostumerByEmail(Long.valueOf(email));
-    }
-
 
 
     // ORDERS
@@ -119,8 +105,6 @@ public class DAO {
     public void deleteOrder(long id) {
         orderRepository.deleteById(id);
     }
-
-
 
     public void updateOrder(Order order) {
         orderRepository.save(order);

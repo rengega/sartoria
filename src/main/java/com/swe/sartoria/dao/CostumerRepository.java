@@ -11,14 +11,6 @@ import java.util.List;
 public interface CostumerRepository extends JpaRepository<Costumer, Long> {
     // write queries for methods as needed in here
 
-
-    @Query("SELECT c FROM Costumer c WHERE c.name = ?1")
-    List<Costumer> findCostumerByName(String name);
-    @Query("SELECT c FROM Costumer c WHERE c.surname = ?1")
-    List<Costumer> findCostumerBySurname(String surname);
-    @Query("SELECT c FROM Costumer c WHERE c.email = ?1")
-    List<Costumer> findCostumerByEmail(Long id);
-
     @Query("SELECT c.id FROM Costumer c WHERE c.name = ?1")
     List<Long> findIdsByName(String name);
     @Query("SELECT c.id FROM Costumer c WHERE c.surname = ?1")

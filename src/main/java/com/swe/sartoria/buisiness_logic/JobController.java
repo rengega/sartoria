@@ -5,7 +5,7 @@ import com.swe.sartoria.model_domain.Job;
 
 import java.util.List;
 
-// TODO: Exepction handling
+// TODO: Exception handling
 public class JobController {
     private DAO dao;
 
@@ -14,6 +14,7 @@ public class JobController {
     }
 
     public void addJob(Job job){
+        // TODO: implement validation
         dao.addJob(job);
     }
 
@@ -26,6 +27,7 @@ public class JobController {
     }
 
     public void updateJob(Job job){
+        // TODO: implement validation
         dao.updateJob(job);
     }
 
@@ -41,6 +43,8 @@ public class JobController {
     public List<Job> getJobByCategory(String category){
         return dao.getJobByCategory(category);
     }
+
+    // TODO: implement searchJob method to search for jobs by name, category, or description
 
     public Job getJob(long id){
         return dao.getJob(id);
