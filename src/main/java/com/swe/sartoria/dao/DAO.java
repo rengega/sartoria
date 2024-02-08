@@ -4,7 +4,6 @@ import com.swe.sartoria.mail_service.MailService;
 import com.swe.sartoria.model_domain.Costumer;
 import com.swe.sartoria.model_domain.Job;
 import com.swe.sartoria.model_domain.Order;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,8 +108,7 @@ public class DAO {
     public void updateOrder(Order order) {
         orderRepository.save(order);
         if (order.getStatus().equals("completed")) {
-            String email = order.getCostumer().getEmail();
-            mailService.sendMail(email, "Order Completed", "Your order has been completed");
+            mailService.notifyCostumer(order);
         }
     }
 

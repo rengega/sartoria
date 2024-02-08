@@ -51,7 +51,7 @@ class SartoriaApplicationTests {
 
     @Test
     void testMailService() {
-        mailService.sendMail("renigega@outlook.it", "test", "test");
+        mailService.sendConfirmationMail("renigega@outlook.it", "test", "test");
     }
 
 

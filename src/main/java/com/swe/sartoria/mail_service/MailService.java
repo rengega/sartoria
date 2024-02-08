@@ -1,11 +1,10 @@
 package com.swe.sartoria.mail_service;
 
 
+import com.swe.sartoria.model_domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,17 +13,13 @@ public class MailService {
     @Autowired
     private MailSender mailSender;
 
-
-    public void sendMail(String to, String subject, String body) {
+    public void notifyCostumer(Order order) {
         // send mail
-        // TODO: implement template for mail
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("gegareni@gmail.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-
+        message.setTo(order.getCostumer().getEmail());
+        message.setSubject("Order is ready");
+        message.setText("Dear " + order.getCostumer().getName()  + "\n Your order with number "+ order.getId() + " is ready for pickup!!! \n Thank you for choosing us! \n Sartoria Team");
         mailSender.send(message);
-
     }
 }
