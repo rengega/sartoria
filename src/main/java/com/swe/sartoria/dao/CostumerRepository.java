@@ -12,12 +12,26 @@ public interface CostumerRepository extends JpaRepository<Costumer, Long> {
     // write queries for methods as needed in here
 
 
-    @Query("SELECT c.id FROM Costumer c WHERE c.name = ?1")
-    List<Long> findCostumerByName(String name);
-    @Query("SELECT c.id FROM Costumer c WHERE c.surname = ?1")
-    List<Long> findCostumerBySurname(String surname);
-    @Query("SELECT c.id FROM Costumer c WHERE c.email = ?1")
-    List<Long> findCostumerById(Long id);
+    @Query("SELECT c FROM Costumer c WHERE c.name = ?1")
+    List<Costumer> findCostumerByName(String name);
+    @Query("SELECT c FROM Costumer c WHERE c.surname = ?1")
+    List<Costumer> findCostumerBySurname(String surname);
+    @Query("SELECT c FROM Costumer c WHERE c.email = ?1")
+    List<Costumer> findCostumerByEmail(Long id);
 
+    @Query("SELECT c.id FROM Costumer c WHERE c.name = ?1")
+    List<Long> findIdsByName(String name);
+    @Query("SELECT c.id FROM Costumer c WHERE c.surname = ?1")
+    List<Long> findIdsBySurname(String surname);
+
+
+    // get id if name or surname contains string
+    @Query("SELECT c.id FROM Costumer c WHERE c.name LIKE %?1%" +
+            " OR c.surname LIKE %?1%")
+    List<Long> findIdsByString(String searchString);
+
+    @Query("SELECT c FROM Costumer c WHERE c.name LIKE %?1%" +
+            " OR c.surname LIKE %?1%")
+    List<Costumer> findCostumerByString(String searchString);
 
 }

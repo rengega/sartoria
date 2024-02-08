@@ -17,6 +17,7 @@ public class MailService {
 
     public void sendMail(String to, String subject, String body) {
         // send mail
+        // TODO: implement template for mail
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("gegareni@gmail.com");
         message.setTo(to);

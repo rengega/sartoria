@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
     // write queries for methods as needed in here
-    @Query("SELECT j.id FROM Job j WHERE j.name = ?1")
-    List<Long> findJobByName(String name);
+    @Query("SELECT j FROM Job j WHERE j.name = ?1")
+    List<Job> findJobByName(String name);
+
+    @Query("SELECT j FROM Job j WHERE j.category = ?1")
+    List<Job> findJobByCategory(String category);
 }

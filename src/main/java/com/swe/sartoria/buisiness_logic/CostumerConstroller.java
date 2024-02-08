@@ -3,6 +3,7 @@ package com.swe.sartoria.buisiness_logic;
 import com.swe.sartoria.dao.DAO;
 import com.swe.sartoria.model_domain.Costumer;
 
+import java.util.List;
 
 
 public class CostumerConstroller {
@@ -13,11 +14,12 @@ public class CostumerConstroller {
     }
 
     public void addCostumer(Costumer consumer){
+
         dao.addCostumer(consumer);
     }
 
-    public void deleteCostumer(long id){
-        dao.deleteCostumer(id);
+    public void deleteCostumer(Costumer costumer){
+        dao.deleteCostumer(costumer.getId());
     }
 
     public void updateConsumer(Costumer costumer){
@@ -26,5 +28,13 @@ public class CostumerConstroller {
 
     public Costumer getCostumer(long id){
         return dao.getCostumer(id);
+    }
+
+    public List<Costumer> getAllCostumers(){
+        return dao.getAllCostumers();
+    }
+
+    public List<Costumer> searchCostumer(String search){
+        return dao.findCostumerBySearch(search);
     }
 }

@@ -4,10 +4,12 @@ import com.swe.sartoria.mail_service.MailService;
 import com.swe.sartoria.model_domain.Costumer;
 import com.swe.sartoria.model_domain.Job;
 import com.swe.sartoria.model_domain.Order;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -53,17 +55,18 @@ public class DAO {
     }
 
     public List<Job> getJobByName(String name) {
-        Long id =  jobRepository.findJobByName(name).get(0);
-        List<Job> jobs = new ArrayList<>();
-        for (Long i : jobRepository.findJobByName(name)) {
-            jobs.add(jobRepository.findById(i).get());
-        }
-        return jobs;
+        return jobRepository.findJobByName(name);
+    }
+
+    public List<Job> getJobByCategory(String category) {
+        return jobRepository.findJobByCategory(category);
     }
 
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
+
+
 
     //  COSTUMERS
 
@@ -89,22 +92,25 @@ public class DAO {
 
     public List<Costumer> findCostumerByName(String name) {
         // add exception handling
-        List<Long> ids = costumerRepository.findCostumerByName(name);
-        List<Costumer> costumers = new ArrayList<>();
-        for (Long id : ids) {
-            costumers.add(costumerRepository.findById(id).get());
-        }
-        return costumers;
+        return costumerRepository.findCostumerByName(name);
     }
 
-    public List<Long> findCostumerBySurname(String surname) {
+    public List<Costumer> findCostumerBySurname(String surname) {
+        // add exception handling
         return costumerRepository.findCostumerBySurname(surname);
     }
 
-    public List<Long> findCostumerById(Long id) {
-        return costumerRepository.findCostumerById(id);
+    public List<Costumer> findCostumerBySearch(String search) {
+        return costumerRepository.findCostumerByString(search);
+    }
+    public List<Costumer> findCostumerByEmail(String email) {
+        // add exception handling
+        return costumerRepository.findCostumerByEmail(Long.valueOf(email));
     }
 
+
+
+    // ORDERS
     public void addOrder(Order order) {
         orderRepository.save(order);
     }
@@ -115,7 +121,7 @@ public class DAO {
     }
 
 
-    // ORDERS
+
     public void updateOrder(Order order) {
         orderRepository.save(order);
         if (order.getStatus().equals("completed")) {
@@ -134,19 +140,39 @@ public class DAO {
 
     // write method to retrieve orders by costumer names
 
+
     public List<Order> getOrdersByCostumerName(String name) {
-        List<Long> clientsForName = costumerRepository.findCostumerByName(name);
-        List<Long> ordersForClient = new ArrayList<>();
+        List<Long> clientsForName = costumerRepository.findIdsByName(name);
+        List<Order> orders = new ArrayList<>();
 
         for (Long id : clientsForName) {
-            ordersForClient.addAll(orderRepository.findOrderByCostumer(id));
-        }
-
-        List<Order> orders = new ArrayList<>();
-        for (Long id : ordersForClient) {
-            orders.add(orderRepository.findById(id).get());
+            orders.addAll(orderRepository.findOrderByCostumer(id));
         }
         return orders;
+    }
+
+    public List<Order> getOrdersByCostumerSurname(String surname) {
+        List<Long> clientsForSurname = costumerRepository.findIdsBySurname(surname);
+        List<Order> orders = new ArrayList<>();
+
+        for (Long id : clientsForSurname) {
+            orders.addAll(orderRepository.findOrderByCostumer(id));
+        }
+        return orders;
+    }
+
+    public List<Order> getOrdersByCostumerString(String searchString) {
+        List<Long> clientsForString = costumerRepository.findIdsByString(searchString);
+        List<Order> orders = new ArrayList<>();
+
+        for (Long id : clientsForString) {
+            orders.addAll(orderRepository.findOrderByCostumer(id));
+        }
+        return orders;
+    }
+
+    public List<Order> findOrdersByDueDate(Date date) {
+        return orderRepository.findOrderByDueDate(date);
     }
 
 }
