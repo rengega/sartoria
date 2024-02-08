@@ -5,6 +5,7 @@ import com.swe.sartoria.model_domain.Costumer;
 
 import java.util.List;
 
+// TODO: Exepction handling
 
 public class CostumerConstroller {
     private DAO dao;
