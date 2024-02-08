@@ -49,10 +49,6 @@ class SartoriaApplicationTests {
         }
     }
 
-    @Test
-    void testMailService() {
-        mailService.sendConfirmationMail("renigega@outlook.it", "test", "test");
-    }
 
 
     // TODO: comment and document to explain everything
