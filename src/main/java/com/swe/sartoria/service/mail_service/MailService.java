@@ -1,7 +1,7 @@
-package com.swe.sartoria.mail_service;
+package com.swe.sartoria.service.mail_service;
 
 
-import com.swe.sartoria.model_domain.Order;
+import com.swe.sartoria.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;

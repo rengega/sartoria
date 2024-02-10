@@ -1,6 +1,6 @@
-package com.swe.sartoria.dao;
+package com.swe.sartoria.repository;
 
-import com.swe.sartoria.model_domain.Order;
+import com.swe.sartoria.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
