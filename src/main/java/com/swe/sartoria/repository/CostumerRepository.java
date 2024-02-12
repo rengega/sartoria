@@ -17,6 +17,5 @@ public interface CostumerRepository extends JpaRepository<Costumer, Long> {
             " OR c.surname LIKE %?1%")
     List<Costumer> searchCostumer(String keyword);
 
-    Costumer save(Costumer costumer);
 
 }
