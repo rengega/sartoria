@@ -114,7 +114,8 @@ public class CostumerServiceImpl implements CostumerService {
         return costumerResponse;
     }
 
-    private CostumerDTO mapToDTO(Costumer costumer) {
+    @Override
+    public CostumerDTO mapToDTO(Costumer costumer) {
         CostumerDTO costumerDTO = new CostumerDTO();
         costumerDTO.setId(costumer.getId());
         costumerDTO.setName(costumer.getName());
@@ -124,7 +125,8 @@ public class CostumerServiceImpl implements CostumerService {
         return costumerDTO;
     }
 
-    private Costumer mapToEntity(CostumerDTO costumerDTO) {
+    @Override
+    public Costumer mapToEntity(CostumerDTO costumerDTO) {
         Costumer costumer = new Costumer();
         costumer.setId(costumerDTO.getId());
         costumer.setName(costumerDTO.getName());

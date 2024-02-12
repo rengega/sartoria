@@ -113,7 +113,9 @@ public class JobServiceImpl implements JobService {
 
         return jobResponse;
     }
-    private Job mapToEntity(JobDTO dto){
+
+    @Override
+    public Job mapToEntity(JobDTO dto){
         Job newJob = new Job();
         newJob.setId(dto.getId());
         newJob.setName(dto.getName());
@@ -123,7 +125,9 @@ public class JobServiceImpl implements JobService {
         return newJob;
     }
 
-    private JobDTO mapToDto(Job job){
+
+    @Override
+    public JobDTO mapToDto(Job job){
         JobDTO jobDTO = new JobDTO();
         jobDTO.setId(job.getId());
         jobDTO.setName(job.getName());

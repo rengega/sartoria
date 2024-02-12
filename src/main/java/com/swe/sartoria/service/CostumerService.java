@@ -2,6 +2,7 @@ package com.swe.sartoria.service;
 
 import com.swe.sartoria.dto.CostumerDTO;
 import com.swe.sartoria.dto.CostumerResponse;
+import com.swe.sartoria.model.Costumer;
 
 public interface CostumerService {
     CostumerDTO addCostumer(CostumerDTO costumerDTO);
@@ -13,4 +14,7 @@ public interface CostumerService {
     void deleteCostumer(long id);
 
     CostumerResponse getAllCostumers(int pageNo, int pageSize);
+
+    Costumer mapToEntity(CostumerDTO costumerDTO);
+    CostumerDTO mapToDTO(Costumer costumer);
 }
