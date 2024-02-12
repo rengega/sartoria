@@ -26,26 +26,17 @@ public class CostumerServiceImpl implements CostumerService {
 
     @Override
     public CostumerDTO addCostumer(CostumerDTO costumerDTO) {
-        Costumer newCostumer = new Costumer();
-        newCostumer.setName(costumerDTO.getName());
-        newCostumer.setSurname(costumerDTO.getSurname());
-        newCostumer.setEmail(costumerDTO.getEmail());
-        newCostumer.setPhone(costumerDTO.getPhone());
+        Costumer newCostumer = mapToEntity(costumerDTO);
 
         newCostumer = costumerRepository.save(newCostumer);
 
-        CostumerDTO responseDTO = new CostumerDTO();
-        responseDTO.setId(newCostumer.getId());
-        responseDTO.setName(newCostumer.getName());
-        responseDTO.setSurname(newCostumer.getSurname());
-        responseDTO.setEmail(newCostumer.getEmail());
-        responseDTO.setPhone(newCostumer.getPhone());
+        CostumerDTO responseDTO = mapToDTO(newCostumer);
 
         return responseDTO;
     }
 
     @Override
-    public CostumerDTO getCostumerById(long id) {
+    public CostumerDTO findCostumerById(long id) {
         Costumer costumer = costumerRepository.findById(id).orElse(null);
         if (costumer == null) {
             return null;
@@ -87,7 +78,11 @@ public class CostumerServiceImpl implements CostumerService {
 
     @Override
     public void deleteCostumer(long id) {
-        costumerRepository.deleteById(id);
+        Costumer costumer = costumerRepository.findById(id).orElse(null);
+        // TODO: Exception handling instead of this
+        if (costumer != null) {
+            costumerRepository.delete(costumer);
+        }
     }
 
     @Override
