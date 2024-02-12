@@ -5,7 +5,7 @@ import com.swe.sartoria.dto.CostumerResponse;
 
 public interface CostumerService {
     CostumerDTO addCostumer(CostumerDTO costumerDTO);
-    CostumerResponse searchCostumer(String search);
+    CostumerResponse searchCostumer(String search, int pageNo, int pageSize);
     CostumerDTO findCostumerById(long id);
 
     CostumerDTO updateCostumer(CostumerDTO costumerDTO, long id);

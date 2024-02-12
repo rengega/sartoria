@@ -5,6 +5,7 @@ import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.model.Costumer;
 import com.swe.sartoria.repository.CostumerRepository;
 import com.swe.sartoria.service.impl.CostumerServiceImpl;
+import org.apache.catalina.LifecycleState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -67,7 +69,6 @@ public class CostumerServiceTest {
     @Test
     public void CostumerService_GetAllCostumers_ReturnCostumerResponse() {
         Page<Costumer> costumers =  mock(Page.class);
-        System.out.println("costumers: " + costumers);
         when(costumerRepository.findAll(any(Pageable.class))).thenReturn(costumers);
         CostumerResponse costumerResponse = costumerService.getAllCostumers(0, 10);
         Assertions.assertNotNull(costumerResponse);
@@ -110,11 +111,38 @@ public class CostumerServiceTest {
 
     @Test
     public void CostumerService_UpdateCostumer_ReturnCostumerDTO() {
+        long costumerId = 1;
+        Costumer costumer  = Costumer.builder()
+                .name("Nome1")
+                .surname("Cognome1")
+                .email("renigega@outlook.it")
+                .phone(3280119573L)
+                .build();
+        CostumerDTO costumerDTO = CostumerDTO.builder()
+                .name("Nome1")
+                .surname("Cognome1")
+                .email("renigega@outlok.it")
+                .phone(3280119573L)
+                .build();
 
+        when(costumerRepository.findById(costumerId)).thenReturn(Optional.ofNullable(costumer));
+        when(costumerRepository.save(costumer)).thenReturn(costumer);
+
+        CostumerDTO updateReturn = costumerService.updateCostumer(costumerDTO, costumerId);
+
+        Assertions.assertNotNull(updateReturn);
     }
+
+
 
     @Test
     public void CostumerService_SearchByCostumerString_ReturnCostumerResponse() {
+        Page<Costumer> costumers =  mock(Page.class);
+        List<Costumer> content = mock(List.class);
+        String searchKey = "searchKey";
+        when(costumerRepository.searchCostumer(searchKey)).thenReturn(content);
+        CostumerResponse costumerResponse = costumerService.searchCostumer(searchKey, 0, 10);
+        Assertions.assertNotNull(costumerResponse);
     }
 
 

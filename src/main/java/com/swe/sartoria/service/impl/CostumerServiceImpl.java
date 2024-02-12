@@ -66,12 +66,7 @@ public class CostumerServiceImpl implements CostumerService {
 
         costumer = costumerRepository.save(costumer);
 
-        CostumerDTO responseDTO = new CostumerDTO();
-        responseDTO.setId(costumer.getId());
-        responseDTO.setName(costumer.getName());
-        responseDTO.setSurname(costumer.getSurname());
-        responseDTO.setEmail(costumer.getEmail());
-        responseDTO.setPhone(costumer.getPhone());
+        CostumerDTO responseDTO = mapToDTO(costumer);
 
         return responseDTO;
     }
@@ -104,7 +99,7 @@ public class CostumerServiceImpl implements CostumerService {
     }
 
     @Override
-    public CostumerResponse searchCostumer(String search){
+    public CostumerResponse searchCostumer(String search, int pageNo, int pageSize){
         List<Costumer> costumerList = costumerRepository.searchCostumer(search);
         List<CostumerDTO> costumerDTOList = costumerList.stream().map(c -> mapToDTO(c)).collect(Collectors.toList());
 
