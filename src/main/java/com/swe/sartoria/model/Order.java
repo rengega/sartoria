@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
 @Entity
@@ -20,18 +19,21 @@ public class Order {
 
     private long id;
     private String description;
-    private String status;
+    private String status = "PENDING";
     private Date dueDate;
     private float discount = 0.0f;   // in percentage
     private float totalPrice;
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Costumer costumer;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Job> jobs;
+    private List<Job> jobs = new ArrayList<>();
 
+    public Order(){
+        this.discount = 0.0f;
+        this.jobs = new ArrayList<>();
+    }
     public void addJob(Job job) {
         jobs.add(job);
         calculateTotalPrice();
