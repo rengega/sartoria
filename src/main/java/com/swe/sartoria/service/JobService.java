@@ -10,7 +10,7 @@ public interface JobService {
     JobResponse getJobsByCategory(String category);
     JobResponse searchJobs(String search);
     JobDTO updateJob(JobDTO jobDTO, Long id);
-    void deleteJob(Long id);
+    void deleteJobById(Long id);
 }
 
 

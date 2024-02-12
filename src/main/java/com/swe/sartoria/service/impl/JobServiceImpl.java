@@ -75,7 +75,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public void deleteJob(Long id) {
+    public void deleteJobById(Long id) {
         Job job = jobRepository.findById(id).orElse(null);
         if (job != null) {
             jobRepository.delete(job);
