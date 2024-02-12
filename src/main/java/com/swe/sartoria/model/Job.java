@@ -11,9 +11,8 @@ import lombok.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 @Table(name = "jobs")
 public class Job {
     @Id

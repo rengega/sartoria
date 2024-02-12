@@ -8,10 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
+@Data
+@Builder
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -22,11 +21,9 @@ public class Order {
     private long id;
     private String description;
     private String status;
-    @Getter
     private Date dueDate;
-
-    // TODO: implement option for discount
-    // TODO: implement and test method for calculating total price
+    private float discount = 0.0f;   // in percentage
+    private float totalPrice;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -35,14 +32,27 @@ public class Order {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Job> jobs;
 
-
-
     public void addJob(Job job) {
         jobs.add(job);
+        calculateTotalPrice();
     }
 
     public void removeJob(Job job) {
         jobs.remove(job);
+        calculateTotalPrice();
+    }
+
+    // Method set final to avoid fragile base class problem
+    private final void calculateTotalPrice() {
+        float total = 0;
+        for (Job job : jobs) {
+            total += job.getPrice();
+        }
+        this.totalPrice = total-(total*discount);
+    }
+    public void setDiscount(float discount) {
+        this.discount = discount;
+        calculateTotalPrice();
     }
 
 
