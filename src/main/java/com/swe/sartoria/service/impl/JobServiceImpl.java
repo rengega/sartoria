@@ -28,7 +28,7 @@ public class JobServiceImpl implements JobService {
     public JobDTO addJob(JobDTO jobDTO) {
         Job newJob = mapToEntity(jobDTO);
         Job savedJob = jobRepository.save(newJob);
-        return mapToDto(savedJob);
+        return mapToDTO(savedJob);
 
 
     }
@@ -37,7 +37,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobDTO getJobById(Long id) {
         Job job = jobRepository.findById(id).orElse(null);
-        return mapToDto(job);
+        return mapToDTO(job);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class JobServiceImpl implements JobService {
         job.setPrice(jobDTO.getPrice());
 
         Job updatedJob = jobRepository.save(job);
-        return mapToDto(updatedJob);
+        return mapToDTO(updatedJob);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class JobServiceImpl implements JobService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Job> jobs = jobRepository.findAll(pageable);
         List<Job> listOfJobs = jobs.getContent();
-        List<JobDTO> content = listOfJobs.stream().map(j -> mapToDto(j)).collect(Collectors.toList());
+        List<JobDTO> content = listOfJobs.stream().map(j -> mapToDTO(j)).collect(Collectors.toList());
 
         JobResponse jobResponse = new JobResponse();
         jobResponse.setContent(content);
@@ -85,7 +85,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobResponse getJobsByCategory(String category) {
         List<Job> jobs = jobRepository.findByCategory(category);
-        List<JobDTO> content = jobs.stream().map(j -> mapToDto(j)).collect(Collectors.toList());
+        List<JobDTO> content = jobs.stream().map(j -> mapToDTO(j)).collect(Collectors.toList());
 
         JobResponse jobResponse = new JobResponse();
         jobResponse.setContent(content);
@@ -101,7 +101,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public JobResponse searchJobs(String key){
         List<Job> jobs = jobRepository.searchJob(key);
-        List<JobDTO> content = jobs.stream().map(j -> mapToDto(j)).collect(Collectors.toList());
+        List<JobDTO> content = jobs.stream().map(j -> mapToDTO(j)).collect(Collectors.toList());
 
         JobResponse jobResponse = new JobResponse();
         jobResponse.setContent(content);
@@ -127,7 +127,7 @@ public class JobServiceImpl implements JobService {
 
 
     @Override
-    public JobDTO mapToDto(Job job){
+    public JobDTO mapToDTO(Job job){
         JobDTO jobDTO = new JobDTO();
         jobDTO.setId(job.getId());
         jobDTO.setName(job.getName());

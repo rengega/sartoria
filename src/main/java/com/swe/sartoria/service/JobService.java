@@ -13,7 +13,7 @@ public interface JobService {
     JobDTO updateJob(JobDTO jobDTO, Long id);
     void deleteJobById(Long id);
 
-    JobDTO mapToDto(Job job);
+    JobDTO mapToDTO(Job job);
     Job mapToEntity(JobDTO jobDTO);
 }
 

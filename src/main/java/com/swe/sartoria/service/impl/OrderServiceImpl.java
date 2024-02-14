@@ -37,8 +37,8 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderDTO addOrder(OrderDTO order) {
-        Order newOrder = mapToEntity(order);
+    public OrderDTO addOrder(OrderDTO orderDTO) {
+        Order newOrder = mapToEntity(orderDTO);
         newOrder = orderRepository.save(newOrder);
         return mapToDTO(newOrder);
     }
@@ -66,7 +66,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
+        Order toDelete = orderRepository.findById(id).orElse(null);
+        // TODO: Exception handling
+        if (toDelete != null) {
+            orderRepository.delete(toDelete);
+        }
     }
 
     @Override
@@ -87,11 +91,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse searchByCostumerString(String search, int pageNo, int pageSize) {
+        //get costumer ids that match search
         List<Long> costumerIds = costumerService.searchCostumer(search, pageNo, pageSize).getContent().stream().map(c -> c.getId()).collect(Collectors.toList());
+        // TODO: swap list with set
+
+        //get orders that match costumer ids
         List<Order> orders = new ArrayList<>();
         for (Long id : costumerIds) {
             orders.addAll(orderRepository.findByCostumerId(id));
         }
+        //craft response
         List<OrderDTO> content = orders.stream().map(o -> mapToDTO(o)).collect(Collectors.toList());
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setContent(content);
@@ -119,11 +128,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order mapToEntity(OrderDTO orderDTO) {
-        Order order = new Order();
+        Order order = Order.builder().build();
         CostumerDTO cost_dto =  costumerService.findCostumerById(orderDTO.getCostumer().getId());
         order.setCostumer(costumerService.mapToEntity(cost_dto));
         List<JobDTO> job_dto = orderDTO.getJobs();
-        List<Job> jobs = job_dto.stream().map(j -> jobService.mapToEntity(j)).collect(Collectors.toList());
+        List<Job> jobs = new ArrayList<>();
+
+        for (JobDTO jobDTO : job_dto) {
+            Job job = jobService.mapToEntity(jobDTO);
+            jobs.add(job);
+        }
+
         order.setJobs(jobs);
         order.setDescription(orderDTO.getDescription());
         order.setDiscount(orderDTO.getDiscount());
@@ -140,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
         CostumerDTO cost_dto =  costumerService.mapToDTO(order.getCostumer());
         orderDTO.setCostumer(cost_dto);
         List<Job> jobs = order.getJobs();
-        List<JobDTO> job_dto = jobs.stream().map(j -> jobService.mapToDto(j)).collect(Collectors.toList());
+        List<JobDTO> job_dto = jobs.stream().map(j -> jobService.mapToDTO(j)).collect(Collectors.toList());
         orderDTO.setJobs(job_dto);
         orderDTO.setDescription(order.getDescription());
         orderDTO.setDiscount(order.getDiscount());

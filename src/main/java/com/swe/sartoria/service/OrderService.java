@@ -13,6 +13,5 @@ public interface OrderService {
     OrderDTO updateOrder(OrderDTO order, Long id);
     void deleteOrder(Long id);
     Order mapToEntity(OrderDTO order);
-
     OrderDTO mapToDTO(Order order);
 }
