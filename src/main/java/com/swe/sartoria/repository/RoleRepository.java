@@ -1,8 +1,7 @@
-package com.pokemonreview.api.repository;
+package com.swe.sartoria.repository;
 
-import com.pokemonreview.api.models.Role;
+import com.swe.sartoria.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 
 import java.util.Optional;
 

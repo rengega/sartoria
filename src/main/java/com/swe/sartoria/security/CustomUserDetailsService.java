@@ -1,8 +1,9 @@
-package com.pokemonreview.api.security;
+package com.swe.sartoria.security;
 
-import com.pokemonreview.api.models.Role;
-import com.pokemonreview.api.models.UserEntity;
-import com.pokemonreview.api.repository.UserRepository;
+import com.swe.sartoria.model.Role;
+import com.swe.sartoria.model.UserEntity;
+import com.swe.sartoria.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
