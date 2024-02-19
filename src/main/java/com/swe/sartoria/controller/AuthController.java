@@ -60,7 +60,7 @@ public class AuthController {
 
 
 
-    @PostMapping("/register/")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDTO registerDto) {
         System.out.println("register controller hit");
 

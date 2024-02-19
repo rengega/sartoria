@@ -144,8 +144,9 @@ public class OrderServiceImpl implements OrderService {
         order.setDiscount(orderDTO.getDiscount());
         order.setStatus(orderDTO.getStatus());
         order.setDueDate(orderDTO.getDueDate());
-        order.setTotalPrice(orderDTO.getTotalPrice());
-        order.setId(orderDTO.getId());
+        if (orderDTO.getId() != null){
+            order.setId(orderDTO.getId());
+        }
         return order;
     }
 

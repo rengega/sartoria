@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 
@@ -25,29 +24,33 @@ public class SecurityConfig {
 
 
     private CustomUserDetailsService userDetailsService;
-    private JwtAuthEntryPoint jwtAuthEntryPoint;
+    private JwtAuthEntryPoint authEntryPoint;
 
     @Autowired
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthEntryPoint jwtAuthEntryPoint) {
         this.userDetailsService = userDetailsService;
-        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
+        this.authEntryPoint = jwtAuthEntryPoint;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("Configuring SecurityFilterChain");
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().permitAll()
-                )
-            .httpBasic(Customizer.withDefaults())
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-            ; // Add this line;
+                .csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(authEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/auth/login", "/api/auth/register/").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic();
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 
 
     @Bean

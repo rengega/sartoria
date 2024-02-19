@@ -2,7 +2,7 @@ package com.swe.sartoria.model;
 
 
 import com.swe.sartoria.controller.CostumerController;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

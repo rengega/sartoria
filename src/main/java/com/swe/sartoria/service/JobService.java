@@ -9,6 +9,8 @@ public interface JobService {
     JobDTO getJobById(Long id);
     JobResponse getAllJobs(int pageNo, int pageSize);
     JobResponse getJobsByCategory(String category);
+
+    // TODO: add pagination here
     JobResponse searchJobs(String search);
     JobDTO updateJob(JobDTO jobDTO, Long id);
     void deleteJobById(Long id);

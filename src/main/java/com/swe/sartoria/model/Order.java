@@ -1,6 +1,6 @@
 package com.swe.sartoria.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -62,5 +62,9 @@ public class Order {
         calculateTotalPrice();
     }
 
+    public void setJobs(List<Job> jobs) {
+        this.jobs = jobs;
+        calculateTotalPrice();
+    }
 
 }

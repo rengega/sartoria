@@ -54,7 +54,7 @@ public class CostumerServiceImpl implements CostumerService {
 
     @Override
     public CostumerDTO updateCostumer(CostumerDTO costumerDTO, long id) {
-        Costumer costumer = costumerRepository.findById(id).orElse(null);
+        Costumer costumer = costumerRepository.findById(costumerDTO.getId()).orElse(null);
         if (costumer == null) {
             return null;
         }

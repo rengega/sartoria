@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailService {
 
-    @Autowired
+
     private MailSender mailSender;
+
+
 
     public void notifyCostumer(Order order) {
         // send mail
