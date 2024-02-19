@@ -17,7 +17,9 @@ public class OrderDTO {
     private String description;
     private List<JobDTO> jobs;
     private float totalPrice;
-    private float discount;
-    private String status;
+    @Builder.Default
+    private float discount = 0;
+    @Builder.Default
+    private String status = "PENDING";
     private Date dueDate;
 }

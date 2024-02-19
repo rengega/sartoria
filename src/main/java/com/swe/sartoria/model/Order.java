@@ -20,6 +20,7 @@ public class Order {
 
     private long id;
     private String description;
+    @Builder.Default
     private String status = "PENDING";
     private Date dueDate;
     @Builder.Default

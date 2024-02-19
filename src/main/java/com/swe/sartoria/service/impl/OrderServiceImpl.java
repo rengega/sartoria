@@ -13,6 +13,7 @@ import com.swe.sartoria.repository.OrderRepository;
 import com.swe.sartoria.service.CostumerService;
 import com.swe.sartoria.service.JobService;
 import com.swe.sartoria.service.OrderService;
+import com.swe.sartoria.service.mail_service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,11 +29,13 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private CostumerService costumerService;
     private JobService jobService;
+    private MailService mailService;
     @Autowired
-    public OrderServiceImpl (OrderRepository orderRepository, CostumerService costumerService, JobService jobService) {
+    public OrderServiceImpl (OrderRepository orderRepository, CostumerService costumerService, JobService jobService, MailService mailService) {
         this.orderRepository = orderRepository;
         this.costumerService = costumerService;
         this.jobService = jobService;
+        this.mailService = mailService;
     }
 
 
@@ -61,6 +64,9 @@ public class OrderServiceImpl implements OrderService {
         order = mapToEntity(orderDTO);
         order.setId(id);
         order = orderRepository.save(order);
+        if (order.getStatus().equals("COMPLETED")) {
+            mailService.notifyCostumer(order);
+        }
         return mapToDTO(order);
     }
 

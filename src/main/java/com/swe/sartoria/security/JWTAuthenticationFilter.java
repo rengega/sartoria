@@ -28,15 +28,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         System.out.println("doFilterInternal hit in JWTAuthenticationFilter.java");
 
-        System.out.println("request.getRequestURI(): " + request.getRequestURI());
-        if (request.getRequestURI().startsWith("/api/auth/register/")) {
-            // add token to header
-            System.out.println("request.getRequestURI().startsWith(\"/api/auth/register\") hit in JWTAuthenticationFilter.java");
-
-        }
-
         String token = getJWTFromRequest(request);
-        System.out.println("token: " + token);
         if(StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
             String username = tokenGenerator.getUsernameFromJWT(token);
 

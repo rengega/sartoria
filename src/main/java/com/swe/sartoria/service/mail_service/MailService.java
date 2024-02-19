@@ -10,12 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailService {
 
-
+    @Autowired
     private MailSender mailSender;
 
-
-
     public void notifyCostumer(Order order) {
+        System.out.println("mail service hit");
         // send mail
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("gegareni@gmail.com");
