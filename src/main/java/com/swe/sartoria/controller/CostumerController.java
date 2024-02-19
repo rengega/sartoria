@@ -30,6 +30,11 @@ public class CostumerController {
         return ResponseEntity.ok(costumerService.getAllCostumers(pageNo, pageSize));
     }
 
+    @GetMapping("/getCostumerById/{id}")
+    public ResponseEntity<CostumerDTO> getCostumerById(@PathVariable int id){
+        return ResponseEntity.ok(costumerService.getCostumerById(id));
+    }
+
     @GetMapping("/searchCostumer/{search}")
     public ResponseEntity<CostumerResponse> searchCostumer(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,

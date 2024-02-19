@@ -99,7 +99,7 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public JobResponse searchJobs(String key){
+    public JobResponse searchJobs(String key, int pageNo, int pageSize){
         List<Job> jobs = jobRepository.searchJob(key);
         List<JobDTO> content = jobs.stream().map(j -> mapToDTO(j)).collect(Collectors.toList());
 

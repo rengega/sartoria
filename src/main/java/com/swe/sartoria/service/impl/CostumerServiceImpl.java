@@ -115,6 +115,12 @@ public class CostumerServiceImpl implements CostumerService {
     }
 
     @Override
+    public CostumerDTO getCostumerById(long id) {
+        Costumer costumer = costumerRepository.findById(id).orElse(null);
+        return mapToDTO(costumer);
+    }
+
+    @Override
     public CostumerDTO mapToDTO(Costumer costumer) {
         CostumerDTO costumerDTO = new CostumerDTO();
         costumerDTO.setId(costumer.getId());

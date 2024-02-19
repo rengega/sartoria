@@ -50,8 +50,8 @@ public class JobController {
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @PathVariable String search
     )
-    {   // TODO: update this once pagination is implemented in the service
-        return ResponseEntity.ok(jobService.searchJobs(search));
+    {
+        return ResponseEntity.ok(jobService.searchJobs(search, pageNo, pageSize));
     }
 
     @PostMapping("/addJob")

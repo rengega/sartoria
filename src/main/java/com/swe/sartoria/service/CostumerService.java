@@ -15,6 +15,8 @@ public interface CostumerService {
 
     CostumerResponse getAllCostumers(int pageNo, int pageSize);
 
+    CostumerDTO getCostumerById(long id);
+
     Costumer mapToEntity(CostumerDTO costumerDTO);
     CostumerDTO mapToDTO(Costumer costumer);
 }
