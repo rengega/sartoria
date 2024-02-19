@@ -32,6 +32,7 @@ public class SecurityConfig {
         this.authEntryPoint = jwtAuthEntryPoint;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -44,7 +45,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/auth/login", "/api/auth/register/").permitAll()
+                .antMatchers("/api/orders/getOrderStatusById").permitAll()
                 .antMatchers("/api/costumer/**", "/api/jobs/**", "/api/orders/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()

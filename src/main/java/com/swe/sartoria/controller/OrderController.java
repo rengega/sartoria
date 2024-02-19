@@ -4,12 +4,18 @@ import com.swe.sartoria.dto.CostumerDTO;
 import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.dto.OrderDTO;
 import com.swe.sartoria.dto.OrderResponse;
+import com.swe.sartoria.model.Order;
 import com.swe.sartoria.service.OrderService;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.Authenticator;
 
 @RestController
 @RequestMapping("api/orders")
@@ -25,6 +31,20 @@ public class OrderController {
     @GetMapping("/testMethod")
     public void controllerHit(){
         System.out.println("Orders controller hit");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            for (GrantedAuthority authority : auth.getAuthorities()) {
+                System.out.println(authority.getAuthority());
+            }
+        }else {
+            System.out.println("auth is null");
+        }
+    }
+
+    @GetMapping("/getOrderStatusById/{id}")
+    public ResponseEntity<String> getOrderStatusById(@PathVariable Long id){
+        OrderDTO order = orderService.getOrderById(id);
+        return new ResponseEntity<>(order.getStatus(), HttpStatus.OK);
     }
 
     @GetMapping("/getAllOrders")
