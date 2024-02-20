@@ -122,6 +122,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
     public UserEntity mapToEntity(UserDTO userDTO) {
         UserEntity user = new UserEntity();
 

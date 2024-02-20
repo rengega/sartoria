@@ -19,4 +19,5 @@ public interface UserService {
         UserEntity mapToEntity(UserDTO userDTO);
 
         // TODO: implement method to check if user exists to use in controller
+        Boolean existsByUsername(String username);
 }

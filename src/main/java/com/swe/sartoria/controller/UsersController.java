@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/superuser")
+@RequestMapping("/api/users")
 public class UsersController {
     UserService userService;
     @Autowired
@@ -32,7 +32,10 @@ public class UsersController {
     @PostMapping("/addUser")
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
+        if (!userService.existsByUsername(userDTO.getUsername())){
+            return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/getByUsername/{username}")

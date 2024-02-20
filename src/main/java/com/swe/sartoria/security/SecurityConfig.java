@@ -46,9 +46,10 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/account/register").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/orders/getOrderStatusById").permitAll()
-                .antMatchers("/api/costumer/**", "/api/jobs/**", "/api/orders/**").hasAuthority("ADMIN")
-                .antMatchers(("api/superuser/**")).hasAuthority("SUPERUSER")
+                .antMatchers("/api/orders/getOrderStatusById").permitAll() // anyone should be able to see the state of their order
+                .antMatchers("/api/costumer/**", "/api/jobs/**", "/api/orders/**").hasAnyAuthority("ADMIN", "SUPERUSER")
+                .antMatchers(("/api/users/deleteUser")).hasAuthority("SUPERUSER")
+                .antMatchers(("/api/users//deleteUser/{id}")).hasAuthority("SUPERUSER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

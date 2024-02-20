@@ -37,6 +37,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     private JWTGenerator jwtGenerator;
 
+
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository,
                           RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
