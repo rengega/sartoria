@@ -18,4 +18,5 @@ public interface UserService {
         UserDTO mapToDTO(UserEntity userEntity);
         UserEntity mapToEntity(UserDTO userDTO);
 
+        // TODO: implement method to check if user exists to use in controller
 }

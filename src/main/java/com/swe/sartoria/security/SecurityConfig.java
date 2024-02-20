@@ -44,9 +44,11 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/account/register").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/orders/getOrderStatusById").permitAll()
                 .antMatchers("/api/costumer/**", "/api/jobs/**", "/api/orders/**").hasAuthority("ADMIN")
+                .antMatchers(("api/superuser/**")).hasAuthority("SUPERUSER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

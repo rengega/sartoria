@@ -26,6 +26,6 @@ public class Account {
     @JoinColumn(name = "costumer_id")
     private Costumer costumer;
 
-    @Builder.Default
+
     private Integer fidelityPoints = 0;
 }

@@ -26,7 +26,7 @@ public class JobController {
     }
 
     @GetMapping("/getAllJobs")
-    public ResponseEntity<JobResponse> getAllCostumers(
+    public ResponseEntity<JobResponse> getAllJobs(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     )
@@ -56,12 +56,12 @@ public class JobController {
 
     @PostMapping("/addJob")
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
-    public ResponseEntity<JobDTO> addCostumer(@RequestBody JobDTO jobDto){
+    public ResponseEntity<JobDTO> addJob(@RequestBody JobDTO jobDto){
         return new ResponseEntity<>(jobService.addJob(jobDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateJob")
-    public ResponseEntity<JobDTO> updateCostumer(@RequestBody JobDTO jobDto){
+    public ResponseEntity<JobDTO> updateJob(@RequestBody JobDTO jobDto){
         return new ResponseEntity<>(jobService.updateJob(jobDto, jobDto.getId()), HttpStatus.OK);
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private int id;
+    private Long id;
     private String username;
     private String password;
     private List<RoleDTO> roles;

@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService{
 
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
+        user.setId(userDTO.getId());
         List<Role> roles = new ArrayList<>();
         for (RoleDTO role : userDTO.getRoles()) {
             roles.add(roleRepository.findByName(role.getName()).get());
@@ -142,11 +143,12 @@ public class UserServiceImpl implements UserService{
 
         userDTO.setUsername(user.getUsername());
         userDTO.setPassword(user.getPassword());
+        userDTO.setId(user.getId());
         List<RoleDTO> roles = new ArrayList<>();
         for (Role role : user.getRoles()) {
             RoleDTO roleDTO  = new RoleDTO();
             roleDTO.setName(role.getName());
-            roles.add(roleDTO);
+            roleDTO.setId(role.getId());
             roles.add(roleDTO);
         }
 
