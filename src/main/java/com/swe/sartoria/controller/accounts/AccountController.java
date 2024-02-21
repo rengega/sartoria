@@ -10,8 +10,7 @@ import com.swe.sartoria.model.Role;
 import com.swe.sartoria.model.UserEntity;
 import com.swe.sartoria.repository.*;
 import com.swe.sartoria.security.JWTGenerator;
-import com.swe.sartoria.service.CostumerService;
-import com.swe.sartoria.service.OrderService;
+import com.swe.sartoria.service.DAO;
 import com.swe.sartoria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,7 @@ public class AccountController {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
 
-    private OrderService orderService;
+    private DAO dao;
     private RoleRepository roleRepository;
     private CostumerRepository costumerRepository;
     private AccountRepository AccountRepository;
@@ -43,14 +42,14 @@ public class AccountController {
 
     @Autowired
     public AccountController(UserService userService, JWTGenerator jwtGenerator, PasswordEncoder passwordEncoder, AccountRepository AccountRepository, RoleRepository roleRepository,
-                             UserRepository userRepository, CostumerRepository costumerRepository, OrderService orderService, AuthenticationManager authenticationManager,
+                             UserRepository userRepository, CostumerRepository costumerRepository, DAO dao, AuthenticationManager authenticationManager,
                              OrderRepository orderRepository)
     {
         this.userService = userService;
         this.jwtGenerator = jwtGenerator;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.orderService = orderService;
+        this.dao = dao;
         this.costumerRepository = costumerRepository;
         this.AccountRepository = AccountRepository;
         this.roleRepository = roleRepository;

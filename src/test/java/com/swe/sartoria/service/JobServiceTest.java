@@ -6,7 +6,6 @@ import com.swe.sartoria.dto.JobResponse;
 import com.swe.sartoria.model.Costumer;
 import com.swe.sartoria.model.Job;
 import com.swe.sartoria.repository.JobRepository;
-import com.swe.sartoria.service.impl.JobServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +27,7 @@ public class JobServiceTest {
     @Mock
     private JobRepository jobRepository;
     @InjectMocks
-    private JobServiceImpl jobService;
+    private DAO dao;
 
     @Test
     public void JobService_AddJob_ReturnJobDTO() {
@@ -45,7 +44,7 @@ public class JobServiceTest {
                 .price(100)
                 .build();
         when(jobRepository.save(any(Job.class))).thenReturn(job);
-        JobDTO jobDTOResult = jobService.addJob(jobDTO);
+        JobDTO jobDTOResult = dao.addJob(jobDTO);
         System.out.println("saved object: " );
         System.out.println(jobDTO.toString());
     }
@@ -54,7 +53,7 @@ public class JobServiceTest {
     public void JobService_GetAllJobs_ReturnsJobResponse() {
         Page<Job> jobs =  mock(Page.class);
         when(jobRepository.findAll(any(Pageable.class))).thenReturn(jobs);
-        JobResponse jobResponse = jobService.getAllJobs(0, 10);
+        JobResponse jobResponse = dao.getAllJobs(0, 10);
         Assertions.assertNotNull(jobResponse);
     }
 
@@ -64,7 +63,7 @@ public class JobServiceTest {
         List<Job> jobsList = mock(List.class);
         String searchKey = "searchKey";
         when(jobRepository.searchJob(searchKey)).thenReturn(jobsList);
-        JobResponse jobResponse = jobService.searchJobs(searchKey);
+        JobResponse jobResponse = dao.searchJobs(searchKey, 0, 10);
         Assertions.assertNotNull(jobResponse);
     }
 
@@ -74,7 +73,7 @@ public class JobServiceTest {
         List<Job> jobsList = mock(List.class);
         String category = "category";
         when(jobRepository.findByCategory(category)).thenReturn(jobsList);
-        JobResponse jobResponse = jobService.getJobsByCategory(category);
+        JobResponse jobResponse = dao.getJobsByCategory(category);
         Assertions.assertNotNull(jobResponse);
     }
 
@@ -83,7 +82,7 @@ public class JobServiceTest {
         long jobId = 1;
         Job job = Job.builder().id(1).name("job1").description("description1").category("category1").price(100).build();
         when(jobRepository.findById(jobId)).thenReturn(java.util.Optional.ofNullable(job));
-        JobDTO jobReturn = jobService.getJobById(jobId);
+        JobDTO jobReturn = dao.getJobById(jobId);
         Assertions.assertNotNull(jobReturn);
     }
 
@@ -94,7 +93,7 @@ public class JobServiceTest {
         JobDTO jobDTO = JobDTO.builder().id(1).name("job1").description("description1").category("category1").price(100).build();
         when(jobRepository.findById(jobId)).thenReturn(java.util.Optional.ofNullable(job));
         when(jobRepository.save(job)).thenReturn(job);
-        JobDTO jobReturn = jobService.updateJob(jobDTO, jobId);
+        JobDTO jobReturn = dao.updateJob(jobDTO, jobId);
         Assertions.assertNotNull(jobReturn);
     }
 
@@ -104,7 +103,7 @@ public class JobServiceTest {
         Job job = Job.builder().id(1).name("job1").description("description1").category("category1").price(100).build();
         when(jobRepository.findById(jobId)).thenReturn(java.util.Optional.ofNullable(job));
         doNothing().when(jobRepository).delete(job);
-        jobService.deleteJobById(jobId);
+        dao.deleteJobById(jobId);
     }
 
 }

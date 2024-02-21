@@ -4,19 +4,14 @@ import com.swe.sartoria.dto.CostumerDTO;
 import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.model.Costumer;
 import com.swe.sartoria.repository.CostumerRepository;
-import com.swe.sartoria.service.impl.CostumerServiceImpl;
-import org.apache.catalina.LifecycleState;
+import com.swe.sartoria.repository.JobRepository;
+import com.swe.sartoria.repository.OrderRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -34,7 +29,7 @@ public class CostumerServiceTest {
     @Mock
     private CostumerRepository costumerRepository;
     @InjectMocks
-    private CostumerServiceImpl costumerService;
+    private DAO dao;
 
     @Test
     public void CostumerService_AddCostumer_ReturnCostumerDTO() {
@@ -54,7 +49,7 @@ public class CostumerServiceTest {
 
         when(costumerRepository.save(any(Costumer.class))).thenReturn(costumer);
 
-        CostumerDTO costumerDTOResult = costumerService.addCostumer(costumerDTO);
+        CostumerDTO costumerDTOResult = dao.addCostumer(costumerDTO);
 
         System.out.println("saved object: " );
         System.out.println(costumerDTO.toString());
@@ -70,7 +65,7 @@ public class CostumerServiceTest {
     public void CostumerService_GetAllCostumers_ReturnCostumerResponse() {
         Page<Costumer> costumers =  mock(Page.class);
         when(costumerRepository.findAll(any(Pageable.class))).thenReturn(costumers);
-        CostumerResponse costumerResponse = costumerService.getAllCostumers(0, 10);
+        CostumerResponse costumerResponse = dao.getAllCostumers(0, 10);
         Assertions.assertNotNull(costumerResponse);
     }
 
@@ -89,7 +84,7 @@ public class CostumerServiceTest {
         when(costumerRepository.findById(costumerId)).thenReturn(Optional.ofNullable(costumer));
         doNothing().when(costumerRepository).delete(costumer);
 
-        assertAll(() -> costumerService.deleteCostumer(costumerId));
+        assertAll(() -> dao.deleteCostumer(costumerId));
 
     }
 
@@ -104,14 +99,14 @@ public class CostumerServiceTest {
                 .build();
         when(costumerRepository.findById(costumerId)).thenReturn(Optional.ofNullable(costumer));
 
-        CostumerDTO costumerReturn = costumerService.findCostumerById(costumerId);
+        CostumerDTO costumerReturn = dao.findCostumerById(costumerId);
 
         Assertions.assertNotNull(costumerReturn);
     }
 
     @Test
     public void CostumerService_UpdateCostumer_ReturnCostumerDTO() {
-        long costumerId = 1;
+        long costumerId = 1L;
         Costumer costumer  = Costumer.builder()
                 .name("Nome1")
                 .surname("Cognome1")
@@ -124,11 +119,13 @@ public class CostumerServiceTest {
                 .email("renigega@outlok.it")
                 .phone(3280119573L)
                 .build();
+        costumer.setId(costumerId);
+        costumerDTO.setId(costumerId);
 
         when(costumerRepository.findById(costumerId)).thenReturn(Optional.ofNullable(costumer));
         when(costumerRepository.save(costumer)).thenReturn(costumer);
 
-        CostumerDTO updateReturn = costumerService.updateCostumer(costumerDTO, costumerId);
+        CostumerDTO updateReturn = dao.updateCostumer(costumerDTO, costumerId);
 
         Assertions.assertNotNull(updateReturn);
     }
@@ -141,7 +138,7 @@ public class CostumerServiceTest {
         List<Costumer> content = mock(List.class);
         String searchKey = "searchKey";
         when(costumerRepository.searchCostumer(searchKey)).thenReturn(content);
-        CostumerResponse costumerResponse = costumerService.searchCostumer(searchKey, 0, 10);
+        CostumerResponse costumerResponse = dao.searchCostumer(searchKey, 0, 10);
         Assertions.assertNotNull(costumerResponse);
     }
 

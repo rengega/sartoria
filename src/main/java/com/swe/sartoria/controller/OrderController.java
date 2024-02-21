@@ -1,12 +1,8 @@
 package com.swe.sartoria.controller;
 
-import com.swe.sartoria.dto.CostumerDTO;
-import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.dto.OrderDTO;
 import com.swe.sartoria.dto.OrderResponse;
-import com.swe.sartoria.model.Order;
-import com.swe.sartoria.service.OrderService;
-import org.aspectj.weaver.ast.Or;
+import com.swe.sartoria.service.DAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +11,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.Authenticator;
-
 @RestController
 @RequestMapping("api/orders")
 public class OrderController {
-    private final OrderService orderService;
+    private final DAO dao;
 
     @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController( DAO dao) {
+        this.dao = dao;
     }
 
 
@@ -43,7 +37,7 @@ public class OrderController {
 
     @GetMapping("/getOrderStatusById/{id}")
     public ResponseEntity<String> getOrderStatusById(@PathVariable Long id){
-        OrderDTO order = orderService.getOrderById(id);
+        OrderDTO order = dao.getOrderById(id);
         return new ResponseEntity<>(order.getStatus(), HttpStatus.OK);
     }
 
@@ -53,7 +47,7 @@ public class OrderController {
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     )
     {
-        return ResponseEntity.ok(orderService.getAllOrders(pageNo, pageSize));
+        return ResponseEntity.ok(dao.getAllOrders(pageNo, pageSize));
     }
 
     @GetMapping("/searchByCostumer/{search}")
@@ -63,7 +57,7 @@ public class OrderController {
             @PathVariable String search
     )
     {
-        return ResponseEntity.ok(orderService.searchByCostumerString(search, pageNo, pageSize));
+        return ResponseEntity.ok(dao.searchByCostumerString(search, pageNo, pageSize));
     }
 
 
@@ -74,29 +68,29 @@ public class OrderController {
             @PathVariable Long id
     )
     {
-        return ResponseEntity.ok(orderService.getByCostumerId(id, pageNo, pageSize));
+        return ResponseEntity.ok(dao.getByCostumerId(id, pageNo, pageSize));
     }
 
     @GetMapping("/getOrderById/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id){
-        return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
+        return new ResponseEntity<>(dao.getOrderById(id), HttpStatus.OK);
     }
 
 
     @PostMapping("/addOrder")
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     public ResponseEntity<OrderDTO> addOrder(@RequestBody OrderDTO orderDto){
-        return new ResponseEntity<>(orderService.addOrder(orderDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(dao.addOrder(orderDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateOrder")
     public ResponseEntity<OrderDTO> updateORder(@RequestBody OrderDTO orderDTO){
-        return new ResponseEntity<>(orderService.updateOrder(orderDTO, orderDTO.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(dao.updateOrder(orderDTO, orderDTO.getId()), HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteOrder/{id}")
     public ResponseEntity<String> deleteOrder(@PathVariable Long id){
-        orderService.deleteOrder(id);
+        dao.deleteOrder(id);
         return new ResponseEntity<>("Order deleted successfully", HttpStatus.OK);
     }
 }

@@ -1,10 +1,8 @@
 package com.swe.sartoria.controller;
 
-import com.swe.sartoria.dto.CostumerDTO;
-import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.dto.JobDTO;
 import com.swe.sartoria.dto.JobResponse;
-import com.swe.sartoria.service.JobService;
+import com.swe.sartoria.service.DAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/jobs")
 public class JobController {
-    private JobService jobService;
+    private final DAO dao;
 
     @Autowired
-    public JobController(JobService jobService) {
-        this.jobService = jobService;
+    public JobController(DAO dao) {
+        this.dao = dao;
     }
 
     @GetMapping("/testMethod")
@@ -31,7 +29,7 @@ public class JobController {
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
     )
     {
-        return ResponseEntity.ok(jobService.getAllJobs(pageNo, pageSize));
+        return ResponseEntity.ok(dao.getAllJobs(pageNo, pageSize));
     }
 
     @GetMapping("/getJobsByCategory/{category}")
@@ -41,7 +39,7 @@ public class JobController {
             @PathVariable String category
     )
     {
-        return ResponseEntity.ok(jobService.getJobsByCategory(category));
+        return ResponseEntity.ok(dao.getJobsByCategory(category));
     }
 
     @GetMapping("/searchJobs/{search}")
@@ -51,23 +49,23 @@ public class JobController {
             @PathVariable String search
     )
     {
-        return ResponseEntity.ok(jobService.searchJobs(search, pageNo, pageSize));
+        return ResponseEntity.ok(dao.searchJobs(search, pageNo, pageSize));
     }
 
     @PostMapping("/addJob")
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)
     public ResponseEntity<JobDTO> addJob(@RequestBody JobDTO jobDto){
-        return new ResponseEntity<>(jobService.addJob(jobDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(dao.addJob(jobDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateJob")
     public ResponseEntity<JobDTO> updateJob(@RequestBody JobDTO jobDto){
-        return new ResponseEntity<>(jobService.updateJob(jobDto, jobDto.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(dao.updateJob(jobDto, jobDto.getId()), HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteJob/{id}")
     public ResponseEntity<String> deleteJob(@PathVariable Long id){
-        jobService.deleteJobById(id);
+        dao.deleteJobById(id);
         return new ResponseEntity<>("Job deleted successfully", HttpStatus.OK);
     }
 

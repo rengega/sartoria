@@ -7,8 +7,7 @@ import com.swe.sartoria.model.Role;
 import com.swe.sartoria.model.UserEntity;
 import com.swe.sartoria.repository.RoleRepository;
 import com.swe.sartoria.repository.UserRepository;
-import com.swe.sartoria.service.CostumerService;
-import com.swe.sartoria.service.OrderService;
+import com.swe.sartoria.service.DAO;
 import com.swe.sartoria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,16 +24,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-    private OrderService orderService;
-    private CostumerService costumerService;
+    private DAO dao;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, OrderService orderService, CostumerService costumerService, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, DAO dao, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.orderService = orderService;
-        this.costumerService = costumerService;
+        this.dao = dao;
         this.passwordEncoder = passwordEncoder;
     }
 

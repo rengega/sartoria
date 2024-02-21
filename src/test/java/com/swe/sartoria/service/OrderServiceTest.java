@@ -4,8 +4,9 @@ import com.swe.sartoria.dto.*;
 import com.swe.sartoria.model.Costumer;
 import com.swe.sartoria.model.Job;
 import com.swe.sartoria.model.Order;
+import com.swe.sartoria.repository.CostumerRepository;
+import com.swe.sartoria.repository.JobRepository;
 import com.swe.sartoria.repository.OrderRepository;
-import com.swe.sartoria.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -27,13 +29,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
     @Mock
-    private JobService jobService;
+    private JobRepository jobRepository;
     @Mock
-    private CostumerService costumerService;
+    private CostumerRepository costumerRepository;
     @Mock
     private OrderRepository orderRepository;
     @InjectMocks
-    private OrderServiceImpl orderService;
+    private DAO dao;
 
     @BeforeEach
     public void setUp() {
@@ -97,10 +99,8 @@ public class OrderServiceTest {
 
 
         when(orderRepository.save(any(Order.class))).thenReturn(order);
-        when(jobService.mapToEntity(any(JobDTO.class))).thenReturn(job);
-        when(costumerService.mapToEntity(any(CostumerDTO.class))).thenReturn(costumer);
-        when(costumerService.findCostumerById(1L)).thenReturn(costumerDTO);
-        OrderDTO savedOrder = orderService.addOrder(orderDTO);
+        when(costumerRepository.findById(1L)).thenReturn(java.util.Optional.of(costumer));
+        OrderDTO savedOrder = dao.addOrder(orderDTO);
 
         Assertions.assertNotNull(savedOrder);
         Assertions.assertEquals(savedOrder.getDescription(), orderDTO.getDescription());
@@ -164,10 +164,8 @@ public class OrderServiceTest {
                 .build();
 
         when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(order));
-        when(jobService.mapToDTO(any(Job.class))).thenReturn(jobDTO);
-        when(costumerService.mapToDTO(any(Costumer.class))).thenReturn(costumerDTO);
 
-        OrderDTO foundOrder = orderService.getOrderById(1L);
+        OrderDTO foundOrder = dao.getOrderById(1L);
 
         Assertions.assertNotNull(foundOrder);
         Assertions.assertEquals(foundOrder.getDescription(), orderDTO.getDescription());
@@ -176,15 +174,15 @@ public class OrderServiceTest {
 
     @Test
     public void OrderService_deleteOrder_void(){
-       Order newOrder = Order.builder()
-               .id(1L)
+        Order newOrder = Order.builder()
+                .id(1L)
                 .description("TestingOrder")
                 .status("In attesa")
                 .dueDate(new Date())
                 .discount(4L)
                 .build();
         when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(newOrder));
-        orderService.deleteOrder(1L);
+        dao.deleteOrder(1L);
 
         // assert exeption thrown : first TODO: implement exception
 
@@ -195,20 +193,18 @@ public class OrderServiceTest {
     public void OrderService_getAllOrders_OrderResponse(){
         Page<Order> orders =  mock(Page.class);
         when(orderRepository.findAll(any(Pageable.class))).thenReturn(orders);
-        OrderResponse allOrders = orderService.getAllOrders(0, 10);
+        OrderResponse allOrders = dao.getAllOrders(0, 10);
         Assertions.assertNotNull(allOrders);
     }
 
     @Test
     public void OrderService_searchByCostumerKey_OrderResponse(){
-        // call to costumerService: craft costumerResponse to be returned
-        CostumerResponse costumerServiceResponse = new CostumerResponse();
-        List<CostumerDTO> content_for_costumer_response = new ArrayList<>();
-        content_for_costumer_response.add(CostumerDTO.builder().id(1L).name("CostumerTo[searchKey]").surname("Cognome1").email("renigega@outlook.it").phone(3280119573L).build());
-        content_for_costumer_response.add(CostumerDTO.builder().id(1L).name("CostumerTo[searchKey]").surname("Cognome1").email("renigega@outlook.it").phone(3280119573L).build());
 
-        costumerServiceResponse.setContent(content_for_costumer_response);
-        when(costumerService.searchCostumer("searchKey", 0, 10)).thenReturn(costumerServiceResponse);
+        List<Costumer> costumers = new ArrayList<>();
+        costumers.add(Costumer.builder().id(1L).name("CostumerTo[searchKey]").surname("Cognome1").email("renigega@outlook.it").phone(3280119573L).build());
+        costumers.add(Costumer.builder().id(1L).name("CostumerTo[searchKey]").surname("Cognome1").email("renigega@outlook.it").phone(3280119573L).build());
+
+        when(costumerRepository.searchCostumer("searchKey")).thenReturn(costumers);
 
 
         // call to orderRepository
@@ -219,6 +215,11 @@ public class OrderServiceTest {
                 .status("In attesa")
                 .dueDate(new Date())
                 .discount(4L)
+                .costumer(Costumer.builder()
+                        .id(1L)
+                        .name("CostumerTo[searchKey]")
+                        .surname("Cognome1")
+                        .email("renigega@outlook.it").build())
                 .build());
         orders.add(Order.builder()
                 .id(1L)
@@ -226,12 +227,18 @@ public class OrderServiceTest {
                 .status("In attesa")
                 .dueDate(new Date())
                 .discount(4L)
+                        .costumer(Costumer.builder()
+                                .id(1L)
+                                .name("CostumerTo[searchKey]")
+                                .surname("Cognome1")
+                                .email("renigega@outlook.it").build())
                 .build());
 
 
         when(orderRepository.findByCostumerId(1L)).thenReturn(orders);
+        when(orderRepository.findByCostumerId(1L)).thenReturn(orders);
 
-        OrderResponse allOrders = orderService.searchByCostumerString("searchKey", 0, 10);
+        OrderResponse allOrders = dao.searchByCostumerString("searchKey", 0, 10);
 
         Assertions.assertNotNull(allOrders);
         // supposing that i find two costumers with the same name
@@ -243,12 +250,20 @@ public class OrderServiceTest {
     @Test
     public void OrderService_getByCostumerId_OrderResponse(){
         List<Order> orders = new ArrayList<>();
+        Costumer costumer  = Costumer.builder()
+                .id(1L)
+                .name("Nome1")
+                .surname("Cognome1")
+                .email("renigega@outlook.it")
+                .build();
+
         orders.add(Order.builder()
                 .id(1L)
                 .description("TestingOrder")
                 .status("In attesa")
                 .dueDate(new Date())
                 .discount(4L)
+                .costumer(costumer)
                 .build());
         orders.add(Order.builder()
                 .id(1L)
@@ -256,11 +271,14 @@ public class OrderServiceTest {
                 .status("In attesa")
                 .dueDate(new Date())
                 .discount(4L)
+                .costumer(costumer)
                 .build());
+
+
 
         when(orderRepository.findByCostumerId(1L)).thenReturn(orders);
 
-        OrderResponse allOrders = orderService.getByCostumerId(1L, 0, 10);
+        OrderResponse allOrders = dao.getByCostumerId(1L, 0, 10);
 
         Assertions.assertNotNull(allOrders);
         Assertions.assertEquals(allOrders.getContent().size(), 2);
@@ -324,11 +342,8 @@ public class OrderServiceTest {
 
         when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(order));
         when(orderRepository.save(any(Order.class))).thenReturn(order);
-        when(jobService.mapToEntity(any(JobDTO.class))).thenReturn(job);
-        when(costumerService.mapToEntity(any(CostumerDTO.class))).thenReturn(costumer);
-        when(costumerService.findCostumerById(1L)).thenReturn(costumerDTO);
-
-        OrderDTO updatedOrder = orderService.updateOrder(orderDTO, 1L);
+        when(costumerRepository.findById(1L)).thenReturn(Optional.of(costumer));
+        OrderDTO updatedOrder = dao.updateOrder(orderDTO, 1L);
 
         Assertions.assertNotNull(updatedOrder);
         Assertions.assertEquals(updatedOrder.getDescription(), orderDTO.getDescription());
@@ -336,5 +351,4 @@ public class OrderServiceTest {
 
 
 }
-
 
