@@ -25,7 +25,7 @@ public class UsersController {
     )
     {
         return ResponseEntity.ok(userService.getAllUsers(pageNo, pageSize));
-    }
+        }
 
     @PostMapping("/addUser")
     @ResponseStatus(org.springframework.http.HttpStatus.CREATED)

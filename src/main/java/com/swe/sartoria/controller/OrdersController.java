@@ -7,7 +7,7 @@ import com.swe.sartoria.dto.OrderResponse;
 import com.swe.sartoria.model.Costumer;
 import com.swe.sartoria.model.Job;
 import com.swe.sartoria.model.Order;
-import com.swe.sartoria.service.DAO_pure;
+import com.swe.sartoria.service.DAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrdersController {
-    private DAO_pure dao;
+    private DAO dao;
 
     @Autowired
-    public OrdersController(DAO_pure dao) {
+    public OrdersController(DAO dao) {
         this.dao = dao;
     }
 
@@ -139,7 +139,7 @@ public class OrdersController {
             @PathVariable Long id
     )
     {
-        List<Order> listOfAllOrders = dao.getByCostumerId(id);
+        List<Order> listOfAllOrders = dao.getOrdersByCostumerId(id);
         if (listOfAllOrders.size() == 0) {
             return ResponseEntity.ok(new OrderResponse());
         }
@@ -170,6 +170,7 @@ public class OrdersController {
     @PutMapping("/updateOrder")
     public ResponseEntity<OrderDTO> updateORder(@RequestBody OrderDTO orderDTO){
         Order order = mapOrderToEntity(orderDTO);
+
         order = dao.updateOrder(order, order.getId());
         if (order == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

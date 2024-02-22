@@ -7,6 +7,7 @@ import com.swe.sartoria.repository.CostumerRepository;
 import com.swe.sartoria.repository.RoleRepository;
 import com.swe.sartoria.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.PrivateKey;
@@ -17,22 +18,14 @@ import java.util.Set;
 @Service
 public class AccountService {
     private AccountRepository accountRepository;
-    private MailService mailService;
-    private RoleRepository roleRepository;
-    private CostumerRepository costumerRepository;
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public AccountService(AccountRepository accountRepository,
-                          MailService mailService,
-                          RoleRepository roleRepository,
-                          CostumerRepository costumerRepository,
                           UserRepository userRepository) {
         this.accountRepository = accountRepository;
-        this.mailService = mailService;
-        this.roleRepository = roleRepository;
         this.userRepository = userRepository;
-        this.costumerRepository = costumerRepository;
     }
 
 
@@ -84,6 +77,10 @@ public class AccountService {
         if (userRepository.existsByUsername(account.getUser().getUsername())){
             return null;
         }
+        // encode the password!!!
+        String encoded = passwordEncoder.encode(account.getUser().getPassword());
+        account.getUser().setPassword(encoded);
+
         return accountRepository.save(account);
     }
 

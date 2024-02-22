@@ -21,14 +21,12 @@ import java.util.List;
 public class UserService{
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-    private DAO dao;
     private PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, DAO dao, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.dao = dao;
         this.passwordEncoder = passwordEncoder;
     }
 

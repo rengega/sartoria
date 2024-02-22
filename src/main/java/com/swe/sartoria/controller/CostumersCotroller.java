@@ -5,7 +5,6 @@ import com.swe.sartoria.dto.CostumerDTO;
 import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.model.Costumer;
 import com.swe.sartoria.service.DAO;
-import com.swe.sartoria.service.DAO_pure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/costumers")
 public class CostumersCotroller {
-    private final DAO_pure dao;
+    private final DAO dao;
 
     @Autowired
-    public CostumersCotroller(DAO_pure dao) {
+    public CostumersCotroller(DAO dao) {
         this.dao = dao;
     }
 

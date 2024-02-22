@@ -1,4 +1,4 @@
-package com.swe.sartoria.controller.myAccount;
+package com.swe.sartoria.controller;
 
 
 import com.swe.sartoria.dto.AuthResponseDTO;
@@ -12,7 +12,7 @@ import com.swe.sartoria.model.UserEntity;
 import com.swe.sartoria.repository.*;
 import com.swe.sartoria.security.JWTGenerator;
 import com.swe.sartoria.service.AccountService;
-import com.swe.sartoria.service.DAO_pure;
+import com.swe.sartoria.service.DAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,19 +23,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/account")
-public class AccountController {
+public class MyAccountController {
     private JWTGenerator jwtGenerator;
     private PasswordEncoder passwordEncoder;
 
     private AccountRepository AccountRepository;
     private AuthenticationManager authenticationManager;
 
-    private DAO_pure dao;
+    private DAO dao;
     private AccountService accountService;
 
     private UserRepository userRepository;
@@ -44,12 +43,12 @@ public class AccountController {
 
 
     @Autowired
-    public AccountController( JWTGenerator jwtGenerator, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
-                              AccountRepository AccountRepository,
-                              DAO_pure dao_pure,
-                              AccountService accountService,
-                              RoleRepository roleRepository,
-                              UserRepository userRepository)
+    public MyAccountController(JWTGenerator jwtGenerator, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+                               AccountRepository AccountRepository,
+                               DAO dao_pure,
+                               AccountService accountService,
+                               RoleRepository roleRepository,
+                               UserRepository userRepository)
     {
         this.jwtGenerator = jwtGenerator;
         this.passwordEncoder = passwordEncoder;
@@ -111,11 +110,11 @@ public class AccountController {
         String username = auth.getName();
         UserEntity user = userRepository.findByUsername(username).get();
         Account myAccount = AccountRepository.findByUser(user);
-        return new ResponseEntity<>(dao.getOrdesByCostId(myAccount.getCostumer().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(dao.getOrdersByCostumerId(myAccount.getCostumer().getId()), HttpStatus.OK);
     }
 
     @PutMapping("/profile/edit")
-    public ResponseEntity<String> updateProfile(@RequestBody CostumerDTO costumerUpdate){
+    public ResponseEntity<String> editProfile(@RequestBody CostumerDTO costumerUpdate){
         Costumer update = new Costumer();
         update.setId(costumerUpdate.getId());
         update.setName(costumerUpdate.getName());
