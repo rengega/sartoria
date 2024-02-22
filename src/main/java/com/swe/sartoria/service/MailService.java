@@ -1,7 +1,7 @@
-package com.swe.sartoria.mail_service;
+package com.swe.sartoria.service;
 
 
-import com.swe.sartoria.model_domain.Order;
+import com.swe.sartoria.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +14,7 @@ public class MailService {
     private MailSender mailSender;
 
     public void notifyCostumer(Order order) {
+        System.out.println("mail service hit");
         // send mail
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("gegareni@gmail.com");
