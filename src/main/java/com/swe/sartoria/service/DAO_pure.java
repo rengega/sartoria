@@ -1,18 +1,16 @@
 package com.swe.sartoria.service;
 
-import com.swe.sartoria.dto.CostumerDTO;
-import com.swe.sartoria.dto.CostumerResponse;
 import com.swe.sartoria.model.Costumer;
+import com.swe.sartoria.model.Job;
+import com.swe.sartoria.model.Order;
 import com.swe.sartoria.repository.CostumerRepository;
 import com.swe.sartoria.repository.JobRepository;
 import com.swe.sartoria.repository.OrderRepository;
-import com.swe.sartoria.service.mail_service.MailService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,12 +31,12 @@ public class DAO_pure {
         return costumerRepository.save(costumer);
     }
 
-    public Costumer findCostumerById(long id) {
+    public Costumer findCostumerById(Long id) {
         return costumerRepository.findById(id).orElse(null);
 
     }
 
-    public Costumer updateCostumer(Costumer costumer, long id) {
+    public Costumer updateCostumer(Costumer costumer, Long id) {
         Costumer costToUpdate = costumerRepository.findById(id).orElse(null);
         if (costumer == null) {
             return null;
@@ -49,7 +47,7 @@ public class DAO_pure {
         return costToUpdate;
     }
 
-    public void deleteCostumer(long id) {
+    public void deleteCostumer(Long id) {
         Costumer costumer = costumerRepository.findById(id).orElse(null);
         // TODO: Exception handling instead of this
         if (costumer != null) {
@@ -71,5 +69,94 @@ public class DAO_pure {
         return costumerRepository.findById(id).orElse(null);
 
     }
+
+
+    // JOBS----------------------------------------------------------------
+
+    public Job addJob(Job job) {
+        return jobRepository.save(job);
+    }
+
+
+    public Job getJobById(Long id) {
+        return jobRepository.findById(id).orElse(null);
+    }
+
+    public Job updateJob(Job job, Long id) {
+        Job toUpdate = jobRepository.findById(id).orElse(null);
+        if (toUpdate == null) {
+            return null;
+        }
+        toUpdate = job;
+        toUpdate = jobRepository.save(toUpdate);
+        return toUpdate;
+    }
+
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
+    public void deleteJobById(Long id) {
+        Job job = jobRepository.findById(id).orElse(null);
+        if (job != null) {
+            jobRepository.delete(job);
+        }
+    }
+
+    public List<Job> getJobsByCategory(String category) {
+        return jobRepository.findByCategory(category);
+    }
+
+    public List<Job> searchJobs(String key){
+        return jobRepository.searchJob(key);
+    }
+
+    // ORDERS----------------------------------------------------------------
+
+    public Order addOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public Order getOrderById(Long id) {
+        return orderRepository.findById(id).orElse(null);
+    }
+
+    public Order updateOrder(Order order, Long id) {
+        Order toUpdate = orderRepository.findById(id).orElse(null);
+        if (toUpdate == null) {
+            return null;
+        }
+        toUpdate = order;
+        toUpdate = orderRepository.save(toUpdate);
+        return toUpdate;
+    }
+
+    public void deleteOrder(Long id) {
+        Order toDelete = orderRepository.findById(id).orElse(null);
+        // TODO: Exception handling
+        if (toDelete != null) {
+            orderRepository.delete(toDelete);
+        }
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public List<Order> searchByCostumerString(String search) {
+        //get costumer ids that match search
+        Set<Long> costumerIds = costumerRepository.searchCostumer(search).stream().map(c -> c.getId()).collect(Collectors.toSet());
+        List<Order> orders = new ArrayList<>();
+        for (Long id : costumerIds) {
+            orders.addAll(orderRepository.findByCostumerId(id));
+        }
+        return orders;
+    }
+
+    public List<Order> getByCostumerId(Long id) {
+        return orderRepository.findByCostumerId(id);
+    }
+
+
 
 }

@@ -7,7 +7,6 @@ import com.swe.sartoria.model.Order;
 import com.swe.sartoria.repository.CostumerRepository;
 import com.swe.sartoria.repository.JobRepository;
 import com.swe.sartoria.repository.OrderRepository;
-import com.swe.sartoria.service.mail_service.MailService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

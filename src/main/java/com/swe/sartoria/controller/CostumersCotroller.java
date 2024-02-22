@@ -1,4 +1,4 @@
-package com.swe.sartoria.controller.newControllers;
+package com.swe.sartoria.controller;
 
 
 import com.swe.sartoria.dto.CostumerDTO;
@@ -46,7 +46,7 @@ public class CostumersCotroller {
 
 
     @GetMapping("getCostumerById/{id}")
-    public ResponseEntity<CostumerDTO> getCostumerById(@PathVariable int id){
+    public ResponseEntity<CostumerDTO> getCostumerById(@PathVariable Long id){
         Costumer costumer = dao.getCostumerById(id);
         CostumerDTO response = mapCostumerToDTO(costumer);
         return ResponseEntity.ok(response);
@@ -135,7 +135,7 @@ public class CostumersCotroller {
     }
 
     @DeleteMapping("/deleteCostumer/{id}")
-    public ResponseEntity<String> deleteCostumer(@PathVariable int id){
+    public ResponseEntity<String> deleteCostumer(@PathVariable Long id){
         dao.deleteCostumer(id);
         return new ResponseEntity<>("Costumer deleted successfully", HttpStatus.OK);
     }

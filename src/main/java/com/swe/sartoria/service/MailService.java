@@ -1,4 +1,4 @@
-package com.swe.sartoria.service.mail_service;
+package com.swe.sartoria.service;
 
 
 import com.swe.sartoria.model.Order;
