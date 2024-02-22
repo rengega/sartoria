@@ -22,4 +22,5 @@ public class OrderDTO {
     @Builder.Default
     private String status = "PENDING";
     private Date dueDate;
+    private Boolean paid = false;
 }

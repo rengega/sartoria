@@ -45,6 +45,7 @@ public class OrdersController {
         order.setDueDate(orderDTO.getDueDate());
         order.setDiscount(orderDTO.getDiscount());
         order.setStatus(orderDTO.getStatus());
+        order.setPaid(orderDTO.getPaid());
         return order;
     }
 
@@ -56,6 +57,7 @@ public class OrdersController {
         costumerDTO.setSurname(order.getCostumer().getSurname());
         costumerDTO.setEmail(order.getCostumer().getEmail());
         costumerDTO.setPhone(order.getCostumer().getPhone());
+        orderDTO.setPaid(order.getPaid());
         orderDTO.setCostumer(costumerDTO);
         List<JobDTO> jobDTOs = new ArrayList<>();
         for (Job job : order.getJobs()) {
@@ -168,7 +170,11 @@ public class OrdersController {
     @PutMapping("/updateOrder")
     public ResponseEntity<OrderDTO> updateORder(@RequestBody OrderDTO orderDTO){
         Order order = mapOrderToEntity(orderDTO);
-        return new ResponseEntity<>(mapOrderToDTO(dao.updateOrder(order, order.getId())), HttpStatus.OK);
+        order = dao.updateOrder(order, order.getId());
+        if (order == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(mapOrderToDTO(order), HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteOrder/{id}")

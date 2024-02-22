@@ -12,10 +12,7 @@ import com.swe.sartoria.model.UserEntity;
 import com.swe.sartoria.repository.*;
 import com.swe.sartoria.security.JWTGenerator;
 import com.swe.sartoria.service.AccountService;
-import com.swe.sartoria.service.DAO;
 import com.swe.sartoria.service.DAO_pure;
-import com.swe.sartoria.service.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,46 +23,42 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/account")
 public class AccountController {
-    private UserService userService;
     private JWTGenerator jwtGenerator;
     private PasswordEncoder passwordEncoder;
-    private UserRepository userRepository;
 
-    private DAO dao;
-    private RoleRepository roleRepository;
-    private CostumerRepository costumerRepository;
     private AccountRepository AccountRepository;
     private AuthenticationManager authenticationManager;
-    private final OrderRepository orderRepository;
 
-    private DAO_pure dao_pure;
+    private DAO_pure dao;
     private AccountService accountService;
+
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
+
 
 
     @Autowired
-    public AccountController(UserService userService, JWTGenerator jwtGenerator, PasswordEncoder passwordEncoder, AccountRepository AccountRepository, RoleRepository roleRepository,
-                             UserRepository userRepository, CostumerRepository costumerRepository, DAO dao, AuthenticationManager authenticationManager,
-                             OrderRepository orderRepository,
-                             DAO_pure dao_pure, AccountService accountService)
+    public AccountController( JWTGenerator jwtGenerator, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+                              AccountRepository AccountRepository,
+                              DAO_pure dao_pure,
+                              AccountService accountService,
+                              RoleRepository roleRepository,
+                              UserRepository userRepository)
     {
-        this.userService = userService;
         this.jwtGenerator = jwtGenerator;
         this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.dao = dao;
-        this.costumerRepository = costumerRepository;
         this.AccountRepository = AccountRepository;
-        this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
-        this.orderRepository = orderRepository;
-
+        this.roleRepository = roleRepository;
         this.accountService = accountService;
-        this.dao_pure = dao_pure;
+        this.userRepository = userRepository;
+        this.dao = dao_pure;
     }
 
     @PostMapping("/login")
@@ -98,6 +91,9 @@ public class AccountController {
 
         newUser.setUsername(dto.getUsername());
         newUser.setPassword(passwordEncoder.encode((dto.getPassword())));
+        Role roles = roleRepository.findByName("USER").get();
+        newUser.setRoles(Collections.singletonList(roles));
+
         newAccount.setUser(newUser);
 
         newCostumer.setName(dto.getName());
@@ -115,7 +111,7 @@ public class AccountController {
         String username = auth.getName();
         UserEntity user = userRepository.findByUsername(username).get();
         Account myAccount = AccountRepository.findByUser(user);
-        return new ResponseEntity<>(orderRepository.findByCostumerId(myAccount.getCostumer().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(dao.getOrdesByCostId(myAccount.getCostumer().getId()), HttpStatus.OK);
     }
 
     @PutMapping("/profile/edit")
@@ -134,7 +130,15 @@ public class AccountController {
         accountService.updateAccount(myAccount, myAccount.getId());
 
         return new ResponseEntity<>("Profile Edited!", HttpStatus.OK);
+    }
 
+    @GetMapping("/proile/myFidelityPoints")
+    public ResponseEntity<Integer> getMyPoints(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        UserEntity user = userRepository.findByUsername(username).get();
+        Account myAccount = AccountRepository.findByUser(user);
+        return new ResponseEntity<>(myAccount.getFidelityPoints(), HttpStatus.OK);
     }
 
 }

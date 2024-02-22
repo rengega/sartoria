@@ -70,7 +70,6 @@ public class DAO_pure {
 
     }
 
-
     // JOBS----------------------------------------------------------------
 
     public Job addJob(Job job) {
@@ -121,13 +120,18 @@ public class DAO_pure {
         return orderRepository.findById(id).orElse(null);
     }
 
+    public List<Order> getOrdesByCostId(Long id){return orderRepository.findByCostumerId(id);}
     public Order updateOrder(Order order, Long id) {
+
         Order toUpdate = orderRepository.findById(id).orElse(null);
         if (toUpdate == null) {
             return null;
         }
         toUpdate = order;
         toUpdate = orderRepository.save(toUpdate);
+        if (toUpdate.getStatus().equals("COMPLETED")){
+            mailService.notifyCostumer(toUpdate);
+        }
         return toUpdate;
     }
 

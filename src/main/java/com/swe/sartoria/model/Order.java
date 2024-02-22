@@ -33,6 +33,8 @@ public class Order {
     @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Job> jobs = new ArrayList<>();
+    @Builder.Default
+    private Boolean paid = false;
 
 
 
