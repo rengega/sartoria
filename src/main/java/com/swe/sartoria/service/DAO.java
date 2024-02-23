@@ -43,6 +43,8 @@ public class DAO {
         return costToUpdate;
     }
 
+
+
     public void deleteCostumer(Long id) {
         Costumer costumer = costumerRepository.findById(id).orElse(null);
         // TODO: Exception handling instead of this
